@@ -1,2 +1,2 @@
 # wyitc.github.io
-<br><a href="wyit.dog">wyit.dog</a>
+<br><a href="https://wyit.dog">wyit.dog</a>
