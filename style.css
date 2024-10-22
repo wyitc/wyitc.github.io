@@ -1,0 +1,42 @@
+@font-face {
+    font-family: "basiic";
+    src: url("/font/basiic.ttf") format('truetype');
+}
+
+p {
+    font-family: 'basiic', 'Courier New', monospace;
+    margin-top: 0;
+    margin-bottom: 0.1em;
+}
+
+.box {
+    border-radius: 6px;
+    border: black;
+    border-style: ridge;
+    width: fit-content;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-block: 8px;
+}
+
+a:visited {
+    color:black;
+}
+
+a {
+    color:black;
+}
+
+a:active {
+    color:gray;
+}
+
+.bottomright {
+    align-items:right;
+    text-align:right;
+    display:flex;
+    min-width:99vw;
+    flex-direction: column;
+    position: absolute;
+    bottom:10px;
+}
