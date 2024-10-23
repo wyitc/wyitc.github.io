@@ -9,7 +9,7 @@ var phrases = [
     "is this thing on?",
     "woof",
     "every song is a comeback",
-    "you can come by any time you like",
+    "you can come by any time you want",
     "distance has no way of making love understandable",
     "references, references! what are your sexual preferences?",
     "if i am a dog then shake hands",
@@ -34,7 +34,18 @@ var phrases = [
     "too much is not enough",
     "this is the life",
     "it's time to get away!",
-    "this world will give you anything as long as you will want to"
+    "this world will give you anything as long as you will want to",
+    "you've got no bait attached!",
+    "fooled animal, bite its tail",
+    "we need so damn many things",
+    "i'm okay, let me go, go away, i'm alright",
+    "is steely dan still together",
+    "what year is it",
+    "a world awake now sleeps",
+    "nowhere to go, nothing to do",
+    "i want to live!!!",
+    "play it cool",
+    "you know i'll always be proud of you"
 ];
 
 window.onload = (function () {
