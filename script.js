@@ -37,8 +37,6 @@ var phrases = [
     "this world will give you anything as long as you will want to"
 ];
 
-
-
 window.onload = (function () {
     var quote = document.getElementById("quote");
     quote.innerHTML = phrases[random(0, phrases.length - 1)];
