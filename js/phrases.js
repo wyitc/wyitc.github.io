@@ -45,7 +45,19 @@ var phrases = [
     "nowhere to go, nothing to do",
     "i want to live!!!",
     "play it cool",
-    "you know i'll always be proud of you"
+    "you know i'll always be proud of you",
+    "why do you do what they tell you?",
+    "surely there's got to be something here, right?",
+    "if you wait long enough, they will give you something",
+    "nothing worth understanding",
+    "in dog we trust",
+    "made you look!",
+    "easy there partner",
+    "are you lost?",
+    "hey there stranger",
+    "is this what you're looking for?",
+    "did you find what you sought?",
+    "are you enjoying this?"
 ];
 
 window.onload = (function () {
