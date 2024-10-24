@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>wyit -> maps</title>
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+        <link rel="stylesheet" href="style.css">
+        <meta charset="utf-8">
+        <meta name="description" content="wyit's beatmaps">
+        <meta name="author" content="wyit">
+        <style>
+            .map {
+                width: 20vw;
+                min-width: 275px;
+                margin-right: 8px;
+                margin-left: 4px;
+                border-radius: 24px;
+                border: 2px black;
+                border-style: ridge;
+                border-bottom-right-radius: 0;
+                border-top-right-radius: 0;
+            }
+
+            .map:hover {
+                border: 2px blue;
+                border-style: ridge;
+            }
+
+            .maptitle {
+                font-size: 24px;
+                font-weight: bold;
+                min-width: 300px;
+                max-width: 500px;
+            }
+
+            .ranked {
+                font: italic bold 16px 'basiic';
+                color: seagreen;
+            }
+
+            td {
+                vertical-align: top;
+            }
+
+            .pagebody {
+                display: flex;
+                flex-direction: row;
+                min-width: 98vw;
+                flex-flow: row;
+            }
+
+            .right {
+                margin-right: 4px;
+                margin-left: auto;
+            }
+
+            .box.mapdesc {
+                position: fixed;
+                bottom: 12px;
+                right: 20px;
+                max-width: 40vw;
+                min-width: 40vw;
+                background-color: white;
+            }
+
+            #description {
+                font-size:24px;
+            }
+        </style>
+        <script src="js/maps.js">
+            
+        </script>
+    </head>
+    
+    <body>
+        <a href="/"><p><- go back</p></a>
+        <hr>
+        <div class="pagebody">
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            <input type="image" class="map" src="https://assets.ppy.sh/beatmaps/2206698/covers/cover@2x.jpg" id="stupid">
+                        </td>
+                        <td>
+                            <a target="_blank" href="https://osu.ppy.sh/beatmapsets/2206698"><p class="maptitle">underscores - Stupid (Can't run from the urge)</p></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="image" class="map" src="https://assets.ppy.sh/beatmaps/2221791/covers/cover@2x.jpg" id="september">
+                        </td>
+                        <td>
+                            <a target="_blank" href="https://osu.ppy.sh/beatmapsets/2221791"><p class="maptitle">Earth, Wind & Fire - September</p></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="image" class="map" src="https://assets.ppy.sh/beatmaps/1746432/covers/cover@2x.jpg" id="crescendolls">
+                        </td>
+                        <td>
+                            <a target="_blank" href="https://osu.ppy.sh/beatmapsets/1746432"><p class="maptitle">Daft Punk - Crescendolls</p></a>
+                            <p class="ranked">Ranked!</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="image" class="map" src="https://assets.ppy.sh/beatmaps/2216456/covers/cover@2x.jpg" id="iwishyouwerehere">
+                        </td>
+                        <td>
+                            <a target="_blank" href="https://osu.ppy.sh/beatmapsets/2216456"><p class="maptitle">Nemo - I Wish You Were Here</p></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="image" class="map" src="https://assets.ppy.sh/beatmaps/2160568/covers/cover@2x.jpg" id="chatblanc">
+                        </td>
+                        <td>
+                            <a target="_blank" href="https://osu.ppy.sh/beatmapsets/2160568"><p class="maptitle">roop - Chatblanc</p></a>
+                            <p class="ranked">Ranked!</p>
+                        </td>
+                    </tr>   
+                    <tr>
+                        <td>
+                            <input type="image" class="map" src="https://assets.ppy.sh/beatmaps/2197178/covers/cover@2x.jpg" id="slinkyjosh">
+                        </td>
+                        <td>
+                            <a target="_blank" href="https://osu.ppy.sh/beatmapsets/2197178"><p class="maptitle">Slinky Josh - Slinky tricks: what people think vs. what I actually do</p></a>
+                        </td>
+                    </tr>   
+                    <tr>
+                        <td>
+                            <input type="image" class="map" src="https://assets.ppy.sh/beatmaps/1552776/covers/cover@2x.jpg" id="routing" onclick="change_mapdesc('routing')">
+                        </td>
+                        <td>
+                            <a target="_blank" href="https://osu.ppy.sh/beatmapsets/1552776"><p class="maptitle">Camellia - Routing</p></a>
+                            <p class="ranked">Ranked!</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="image" class="map" src="https://assets.ppy.sh/beatmaps/2079607/covers/cover@2x.jpg" id="stars">
+                        </td>
+                        <td>
+                            <a target="_blank" href="https://osu.ppy.sh/beatmapsets/2079607"><p class="maptitle">Hum - Stars</p></a>
+                            <p class="ranked">Ranked!</p>
+                        </td>
+                    </tr>   
+                    <tr>
+                        <td>
+                            <input type="image" class="map" src="https://assets.ppy.sh/beatmaps/2122207/covers/cover@2x.jpg" id="locals">
+                        </td>
+                        <td>
+                            <a target="_blank" href="https://osu.ppy.sh/beatmapsets/2122207"><p class="maptitle">underscores - Locals (Girls like us) (with gabby start)</p></a>
+                        </td>
+                    </tr>   
+                    <tr>
+                        <td>
+                            <input type="image" class="map" src="https://assets.ppy.sh/beatmaps/2020848/covers/cover@2x.jpg" id="movement">
+                        </td>
+                        <td>
+                            <a target="_blank" href="https://osu.ppy.sh/beatmapsets/2020848"><p class="maptitle">LCD Soundsystem - Movement</p></a>
+                        </td>
+                    </tr>   
+                    <tr>
+                        <td>
+                            <input type="image" class="map" src="https://assets.ppy.sh/beatmaps/1540780/covers/cover@2x.jpg" id="fathero">
+                        </td>
+                        <td>
+                            <a target="_blank" href="https://osu.ppy.sh/beatmapsets/1540780"><p class="maptitle">Frank Zappa - Father O'Blivion</p></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="image" class="map" src="https://assets.ppy.sh/beatmaps/1734500/covers/cover@2x.jpg" id="copyright">
+                        </td>
+                        <td>
+                            <a target="_blank" href="https://osu.ppy.sh/beatmapsets/1734500"><p class="maptitle">leroy - copyright strike my fucking nuts</p></a>
+                        </td>
+                    </tr>       
+                    <tr>
+                        <td>
+                            <input type="image" class="map" src="https://assets.ppy.sh/beatmaps/1835696/covers/cover@2x.jpg" id="freakytimes">
+                        </td>
+                        <td>
+                            <a target="_blank" href="https://osu.ppy.sh/beatmapsets/1835696"><p class="maptitle">Louis Cole - Freaky Times</p></a>
+                        </td>
+                    </tr>       
+                    <tr>
+                        <td>
+                            <input type="image" class="map" src="https://assets.ppy.sh/beatmaps/1802110/covers/cover@2x.jpg" id="fived">
+                        </td>
+                        <td>
+                            <a target="_blank" href="https://osu.ppy.sh/beatmapsets/1802110"><p class="maptitle">Death Grips - 5D</p></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="image" class="map" src="https://assets.ppy.sh/beatmaps/1704881/covers/cover@2x.jpg" id="elronzacapa">
+                        </td>
+                        <td>
+                            <a target="_blank" href="https://osu.ppy.sh/beatmapsets/1704881"><p class="maptitle">bohemianvoodoo - El Ron Zacapa</p></a>
+                        </td>
+                    </tr>      
+                    <tr>
+                        <td>
+                            <input type="image" class="map" src="https://assets.ppy.sh/beatmaps/1457749/covers/cover@2x.jpg" id="magi">
+                        </td>
+                        <td>
+                            <a target="_blank" href="https://osu.ppy.sh/beatmapsets/1457749"><p class="maptitle">AJJ - Gift of the Magi 2: Return of the Magi</p></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="image" class="map" src="https://assets.ppy.sh/beatmaps/1425972/covers/cover@2x.jpg" id="nintendowfc">
+                        </td>
+                        <td>
+                            <a target="_blank" href="https://osu.ppy.sh/beatmapsets/1425972"><p class="maptitle">Ohta Asuka, Nagamatsu Ryo - Nintendo WFC</p></a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="">
+                <div class="box mapdesc">
+                    <p id="description">Click an image for a little description about the map.</p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
