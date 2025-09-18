@@ -1,73 +1,114 @@
-window.onload = ( function () {
-    console.log("Hello fucker.");
+import { descriptions }  from './descriptions.js';
 
-    maps = document.getElementsByClassName("map");
-    for (var i = 0; i < maps.length; i++) {
-        maps.item(i).onclick = function () {change_mapdesc(this.id);}
+
+
+window.onload = ( function () {
+    
+    const ids = Object.keys(descriptions)
+
+    console.log("Loaded " + ids.length + " epic beatmaps!");
+
+    for (let i = Object.keys(descriptions).length-1; i >= 0; i--) {
+        add_map(ids[i]);
     }
+
+    console.log(get_all_rows());
+
+    const rankedbox = document.getElementById("rankedbox");
+
+    rankedbox.addEventListener("change", (event) => {
+        toggle_unranked_visibility()
+    })
+
+    toggle_unranked_visibility()
+
+    
 })
 
-function change_mapdesc(k) {
+function change_mapdesc(id) {
     var desc = document.getElementById("description");
     
-    if (k in valid_descriptions) {
-        desc.innerHTML = valid_descriptions[k];
+    if (id in descriptions) {
+        let id_desc = descriptions[id][1];
+        id_desc.replace("\n", "<br>")
+        desc.innerHTML = id_desc;
     }
-}  
+}
 
-valid_descriptions = {
-    "stupid":
-        "My favorite map I've made so far! Finally, finally, finally, something I'm really proud of. Which is surprising, considering it probably took the shortest amount of time to make start -> finish. \
-        Maybe I just gotta make the map and not worry so much. <br><br> Whatever, it's a ton of fun. If you're gonna check out any map of mine, let it be this one!",
+function add_map(id) {
+
+    const mapdata = descriptions[id][0];
+    const mapdesc = descriptions[id][1];
     
-    "september":
-        "Fun little alt map. A little odd at places (sacrificing gameplay to make the visuals work), but I'm very pleased with how it turned out. Hopefully I can get it ranked next September.",
+    // this looks like this sucks
+    // is this the only way you can do this?
+    // Kataryn I know you're reading this please tell me if this sucks
 
-    "crescendolls":
-        "Silly repetition gimmick set. If Daft Punk could loop the same sample for three minutes for a song, then I can do this, right?",
+    // create elements
 
-    "iwishyouwerehere":
-        "A little easy map never hurt anybody. <br>(How the fuck do you make sliderart?)",
+    let maptable = document.getElementById("maptable");
+    let new_map = document.createElement("tr");
+    let img_frame = document.createElement("td");
+    let title_frame = document.createElement("td");
+    let img = document.createElement("input");
+    let title_link = document.createElement("a");
+    let title = document.createElement("p");
+    let diffname = document.createElement("p");
 
-    "chatblanc":
-        "hey do you guys wanna hear my fanzhen impression",
+    // change element attributes
+
+    new_map.setAttribute("id", id)
+    img.setAttribute("class", "map");
+    img.setAttribute("type", "image");
+    img.setAttribute("src", mapdata[5]);
+    title_link.setAttribute("target", "_blank");
+    title_link.setAttribute("href", "https://osu.ppy.sh/beatmaps/" + id);
+    title.setAttribute("class", "maptitle");
+    title.textContent = mapdata[1] + " - " + mapdata[0];
+    diffname.textContent = mapdata[2] + " (" + mapdata[4] + "*)";
+
+    img.onclick = function () {change_mapdesc(id)}
+
+    // link 'em up
     
-    "slinkyjosh":
-        "Throwaway map I made for a friend that does not play osu!.",
+    img_frame.appendChild(img);
+    title_frame.appendChild(title_link);
+    title_link.appendChild(title);
+    title_frame.appendChild(diffname);
+    new_map.appendChild(img_frame);
+    new_map.appendChild(title_frame);
+    maptable.appendChild(new_map);
 
-    "routing":
-        "Metro line slider gimmick set. My diff is probably my least favorite out of the 5*+ ones, if I'm being honest. Never liked how it played. <br><br>\
-        Set came together very nicely, though! Many props to the GDers, and to blixys for hitsounding. Give all the diffs a whirl.",
+    if (is_ranked(id)) {
+        let rankedtext = document.createElement("p");
+        rankedtext.setAttribute("class", "ranked");
+        rankedtext.textContent = "Ranked!";
+        title_frame.appendChild(rankedtext);
+    }
+}
 
-    "stars":
-        "The first ranked wyit map. Thanks to blixys for telling me to finish this one, as well as bat and squirrelp for their help. Much love to all three of you. \
-        Very happy to be putting real music in the Ranked section; gotta get back on that grind soon!",
+function get_all_rows() {
+    let maptable = document.getElementById("maptable");
+    return maptable.children;
+}
 
-    "locals":
-        "One of my favorite songs from 2023. This diff has found a loving home on quantumvortex's set of this song, which is linked in the description.",
+function is_ranked(id) {
+    return "RankStatus.RANKED|RankStatus.QUALIFIED".match(descriptions[id][0][3]);
+}
 
-    "movement":
-        "A little jank. Fits the vibe. You might hate this song.",
+function toggle_unranked_visibility() {
 
-    "fathero":
-        "Was going to make a set for this, but gave up. Still pretty fun, though! People seem to enjoy it. Real Music.",
-
-    "copyright":
-        "Compliments to Chef Ancelysia for cooking with the hitsounds. My hardest map.",
+    const showranked = rankedbox.checked;
+    let rows = get_all_rows();
     
-    "freakytimes":
-        "Idea dump alt swing map. One of my better ones for sure; might push it later on. Love you, Louis.",
-    
-    "fived":
-        "Short. Includes a blixys diff.",
+    for (let i = 0; i < rows.length; i++) {
 
-    "elronzacapa":
-        "My \"first\" map. Uploaded a few before I finished this one, but this one was 90% complete for a long, long time. Felt like I owed this upload to people who stuck around. \
-        <br>Rather mistimed and weird. You might get some mileage out of it, though.",
-
-    "magi":
-        "Jumpy! Still figuring stuff out, but has some cool things peppered here and there. Thanks olc for modding this. My goat.",
-
-    "nintendowfc":
-        "The root of all my problems."
+        let row = rows[i];
+        
+        if (!is_ranked(row.id) && showranked) {
+            row.hidden = true;
+        } else {
+            row.hidden = false
+        }
+    }
 }

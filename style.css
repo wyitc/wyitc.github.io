@@ -8,7 +8,7 @@
     --foreground-color: rgb(23, 23, 23);
 }
 
-p {
+p, label {
     font-family: 'basiic', 'Courier New', monospace;
     margin-top: 0;
     margin-bottom: 0.1em;
