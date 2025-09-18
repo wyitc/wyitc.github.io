@@ -15,12 +15,17 @@ window.onload = ( function () {
     console.log(get_all_rows());
 
     const rankedbox = document.getElementById("rankedbox");
+    const gdbox = document.getElementById("gdbox")
 
     rankedbox.addEventListener("change", (event) => {
-        toggle_unranked_visibility()
+        update_visibility()
     })
 
-    toggle_unranked_visibility()
+    gdbox.addEventListener("change", (event) => {
+        update_visibility()
+    })
+
+    update_visibility()
 
     
 })
@@ -96,16 +101,21 @@ function is_ranked(id) {
     return "RankStatus.RANKED|RankStatus.QUALIFIED".match(descriptions[id][0][3]);
 }
 
-function toggle_unranked_visibility() {
+function is_gd(id) {
+    return descriptions[id][0][6];
+}
+
+function update_visibility() {
 
     const showranked = rankedbox.checked;
+    const showgds = gdbox.checked
     let rows = get_all_rows();
     
     for (let i = 0; i < rows.length; i++) {
 
         let row = rows[i];
         
-        if (!is_ranked(row.id) && showranked) {
+        if ((!is_ranked(row.id) && showranked) | (is_gd(row.id) && !showgds)) {
             row.hidden = true;
         } else {
             row.hidden = false
