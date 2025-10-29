@@ -57,7 +57,7 @@ export const descriptions = {
             "https://assets.ppy.sh/beatmaps/2371868/covers/cover@2x.jpg?1756249420",
             false
         ],
-        "Really happy with how this turned out. Seems like people really enjoy this one too.\nWas really trying to channel kiddly and PandaHero. Hopefully that comes through well.\nHopefully this is the last map I make while thinking about someone who has wronged me.\n\nCS7 GD from Apollo."
+        "Really happy with how this turned out. Seems like people really enjoy this one too.\nWas really trying to channel kiddly and PandaHero. Hopefully that comes through well.\nWas going through some stuff making it.\n\nCS7 GD from Apollo."
     ],
     "5112812": [
         [
@@ -105,7 +105,7 @@ export const descriptions = {
             "https://assets.ppy.sh/beatmaps/2345801/covers/cover@2x.jpg?1745641817",
             false
         ],
-        "That twink will pay"
+        "Everybody hates a clown\nEverybody dies and drowns\nEverybody throws a party\nEverybody throws a funeral"
     ],
     "4990204": [
         [
