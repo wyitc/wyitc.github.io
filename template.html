@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title id="page-title">UHHH</title>
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+        <link rel="stylesheet" href="../style.css">
+        <meta charset="utf-8">
+        <meta name="description" content="Description">
+        <meta name="author" content="author">
+        <style>
+            .blog-content {
+                width: 60vw;
+                border: 2px var(--foreground-color);
+                border-radius: 12px;
+                border-style: solid;
+            }
+
+            .blog-body-text {
+                white-space: pre-wrap;
+                font-size: 20px;
+                margin: 8px;
+            }
+
+            h1, h2, h3 {
+                margin: 8px;
+            }
+
+            .container {
+                display: flex;
+                justify-content: center;
+                text-align: left;
+            }
+        </style>
+        <script id="temp-script">
+            window.onload = ( function () {
+                document.getElementById("title-text").innerHTML = localStorage.getItem("post-title");
+                document.getElementById("author").innerHTML = "by " + localStorage.getItem("post-author");
+                document.getElementById("blog-body-text").innerHTML = localStorage.getItem("post-content");
+                document.getElementById("datetime-text").innerHTML = "written " + localStorage.getItem("datetime");
+                
+                // deletes this <script> tag
+                console.log("Deleting this script. Goodbye, world!");
+                document.getElementById("temp-script").remove();
+            })
+        </script>
+        <script id="replace-title">
+            let path = window.location.pathname;
+            let html_filename = path.substring(path.lastIndexOf('/') + 1);
+            html_filename = html_filename.slice(0, -5);
+            document.getElementById("page-title").innerHTML = "wyit -> blog -> " + html_filename;
+        </script>
+        <script id="download-html">
+            function download_html() {
+                
+                // create a copy of html document and tidy the copy up for download
+                const doc = document;
+                if (doc.getElementById("temp-script")) { doc.getElementById("temp-script").remove(); }
+                doc.getElementById("download-html").remove();
+                doc.getElementById("back-button").setAttribute("href", "blog.html");
+                doc.getElementById("download-button").remove();
+                const doc_content = doc.documentElement.innerHTML;
+
+                // create blob with html data
+                const download_blob = new Blob([doc_content], {type: "text/html"});
+                
+                // create + use download link
+                const link = document.createElement("a");
+                url = URL.createObjectURL(download_blob);
+                link.href = url;
+                link.download = "blog_post.html";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            }
+        </script>
+    </head>
+
+    <body>
+        <a href="writer.html" id="back-button"><p><- go back</p></a>
+        <a href="javascript:void(0);" onclick="download_html();" id="download-button"><p>download this as html</p></a>
+        <hr>
+        <div class="container">
+            <div class="blog-content">
+                <h1 id="title-text">Title</h1>
+                <h2 id="datetime-text">written 01-01-2000</h2>
+                <h3 id="author">by wyit</h3>
+                <br>
+                <p class="blog-body-text" id="blog-body-text">Blog text.</p>
+            </div>
+        </div>
+    </body>
+</html>

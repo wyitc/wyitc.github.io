@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>wyit -> blog</title>
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+        <link rel="stylesheet" href="style.css">
+        <meta charset="utf-8">
+        <meta name="description" content="wyit's blog">
+        <meta name="author" content="wyit">
+
+        <script src="js/blog.js?filever=<?=filesize('js/blog.js')?" type="module"></script>
+        <style>
+            .blog-list {
+                font-family: 'basiic', 'Courier New', monospace;
+            }
+            
+            th, td {
+                text-align: left;
+                padding-right: 24px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <a href="/"><p><- go back</p></a>
+        <a href="writer.html"><p>write</p></a>
+        <hr>
+        <table class="blog-list" id="blog-list">
+            <tr>
+                <th>Date</th>
+                <th>Title</th>
+            </tr>
+        </table>
+    </body>
+</html>
+            

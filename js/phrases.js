@@ -2,7 +2,7 @@ function random(lower_bound, upper_bound) {
     return Math.round(Math.random() * (upper_bound - lower_bound) + lower_bound);
 }
 
-var phrases = [
+let phrases = [
     "fuzzy sun, get you one by one",
     "it's all downhill from here",
     "i've got reservations about so many things, but not about you",
@@ -57,7 +57,21 @@ var phrases = [
     "hey there stranger",
     "is this what you're looking for?",
     "did you find what you sought?",
-    "are you enjoying this?"
+    "are you enjoying this?",
+    "i will try and know whatever i try",
+    "i will be gone, but not forever",
+    "one day you'll lie here but everything will have changed",
+    "greyhound bus to chocolate town",
+    "blue crab cakes",
+    "melee melee melee melee melee",
+    "get off my lawn",
+    "don't you don't you",
+    "make it it",
+    "did you put yourself in what you painted?",
+    "don't be the last to hear it first",
+    "do we have another taker?",
+    "it's fine dude put your pants back on",
+    "caught you looking bro"
 ];
 
 window.onload = (function () {

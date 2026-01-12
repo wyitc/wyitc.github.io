@@ -27,7 +27,6 @@ window.onload = ( function () {
 
     update_visibility()
 
-    
 })
 
 function change_mapdesc(id) {
@@ -46,8 +45,7 @@ function add_map(id) {
     const mapdesc = descriptions[id][1];
     
     // this looks like this sucks
-    // is this the only way you can do this?
-    // Kataryn I know you're reading this please tell me if this sucks
+    // someone please help me
 
     // create elements
 
