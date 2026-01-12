@@ -1,0 +1,34 @@
+# BLOG
+
+GENERAL
+
+add image url thumbnail
+
+add tag support
+
+BACKEND
+
+github actions
+    - automatically run compile_blogs.py on any git push
+
+move osu beatmap info compile to this repository
+
+write js script to dynamically create html file for download
+    - copy html, but change necessary attributes
+        - delete script tag
+        - ensure back button goes to blog.html instead of writer.html
+        - remove download html button(?)
+
+more robust datetime
+
+sort blog entries by date
+
+FRONTEND
+
+hide write page + add explanation on how to use
+
+add pages?
+
+
+
+# OTHER
