@@ -1,0 +1,22 @@
+on:
+  push:
+    branches:
+      - main
+      - release/*
+
+jobs:
+  update-blog-index:
+    name: Update blog index page
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      
+      - name: setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: run compile_blogs.py
+        run: python ./py/compile_blog.py

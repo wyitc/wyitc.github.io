@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html><head>
+        <title id="page-title">wyit -&gt; blog -&gt; template</title>
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+        <link rel="stylesheet" href="../style.css">
+        <meta charset="utf-8">
+        <meta name="description" content="Description">
+        <meta name="author" content="author">
+        <style>
+            .blog-content {
+                width: 60vw;
+                border: 2px var(--foreground-color);
+                border-radius: 12px;
+                border-style: solid;
+            }
+
+            .blog-body-text {
+                white-space: pre-wrap;
+                font-size: 20px;
+                margin: 8px;
+            }
+
+            h1, h2, h3 {
+                margin: 8px;
+            }
+
+            .container {
+                display: flex;
+                justify-content: center;
+                text-align: left;
+            }
+        </style>
+        
+        <script id="replace-title">
+            let path = window.location.pathname;
+            let html_filename = path.substring(path.lastIndexOf('/') + 1);
+            html_filename = html_filename.slice(0, -5);
+            document.getElementById("page-title").innerHTML = "wyit -> blog -> " + html_filename;
+        </script>
+        
+    </head>
+
+    <body>
+        <a href="/blog.html" id="back-button"><p>&lt;- go back</p></a>
+        
+        <hr>
+        <div class="container">
+            <div class="blog-content">
+                <h1 id="title-text">guess what</h1>
+                <h2 id="datetime-text">written 1/14/2026, 1:35:49 PM</h2>
+                <h3 id="author">by chicken butt</h3>
+                <br>
+                <p class="blog-body-text" id="blog-body-text">LOL</p>
+            </div>
+        </div>
+    
+</body></html>
