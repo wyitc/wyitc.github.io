@@ -14,8 +14,6 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.MY_GH_PAT }}
       
       - name: setup python
         uses: actions/setup-python@v5
@@ -29,5 +27,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "auto-update blog index"
-          token: ${{ secrets.MY_GH_PAT }}
           file_pattern: 'js/entries.js'
