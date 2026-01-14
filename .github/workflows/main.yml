@@ -3,6 +3,8 @@ on:
     branches:
       - main
       - release/*
+    paths:
+      - 'blogs'
 
 jobs:
   update-blog-index:
@@ -20,3 +22,6 @@ jobs:
 
       - name: run compile_blogs.py
         run: python ./py/compile_blog.py
+
+      - name: push changes
+        run: git push origin main
