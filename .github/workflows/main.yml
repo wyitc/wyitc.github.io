@@ -19,4 +19,4 @@ jobs:
           python-version: '3.12'
 
       - name: run compile_blogs.py
-        run: python ./py/compile_blog.py
+        run: python py/compile_blog.py
