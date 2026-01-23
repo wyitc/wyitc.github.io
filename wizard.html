@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title id="page-title">wyit -> wizard</title>
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+        <link rel="stylesheet" href="../style.css">
+        <meta charset="utf-8">
+        <meta name="description" content="wizard score tracker">
+        <meta name="author" content="wyit">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <style>
+            .player-names > th > input {
+                font-size: 24px;
+                font-family: 'basiic', 'Courier New', monospace;
+            }
+
+            th, td {
+                border: 1px solid gray;
+            }
+
+            .input-button {
+                min-height: max-content;
+            }                
+
+            .button-row > td > input {
+                border-radius: 0px;
+            }
+
+            .input-table-row > td {
+                
+                width: 80px;
+                
+            }
+
+            .score-text {
+                width: 44px;
+                text-align: center;
+                font-size: 24px;
+            }
+            
+            .bid-text, .actual-text {
+                width: 30px;
+                text-align: center;
+            }
+
+            .name-field {
+                box-sizing: border-box;
+                width: 100%;
+            }
+
+            #main-container {
+                max-width:610px;
+            }
+
+            #player-count-container {
+                max-width: fit-content;
+            }
+
+            #player-count-container > p {
+                display: grid;
+                place-items: center;
+            }
+
+            #round-buttons {
+                display: grid;
+            }
+
+            #round-buttons > input {
+                min-width: 100%;
+            }
+
+            .input-number-cell {
+                min-width: 100%;
+            }
+
+            .input-number-text {
+                font-size: 24px;
+                text-align: center;
+                margin-bottom: -0.15em;
+            }
+            
+        </style>
+        <script>
+
+            const table_index_placements = [
+                1, 12, 0,
+                3, 13, 2,
+                5, 14, 4,
+                7, 15, 6,
+                9, 16, 8,
+                11, 17, 10
+            ];
+
+            let game_state = {
+                player_count: 6,
+                names: ["", "", "", "", "", ""],
+                current_round: [[0, 0],[0, 0],[0, 0],[0, 0],[0, 0],[0, 0]],
+                rounds: [],
+                scores: [0, 0, 0, 0, 0, 0]
+            }
+
+            function save_names() {
+                const name_fields = Array.from(document.getElementsByClassName('name-field'));
+                for (let i = 0; i<6; i++) {
+                    game_state.names[i] = name_fields[i].value;
+                }
+                save_game_state();
+            }
+
+            function load_names() {
+                const name_fields = Array.from(document.getElementsByClassName('name-field'));
+                for (let i = 0; i<6; i++) {
+                    name_fields[i].value = game_state.names[i];
+                }
+            }
+
+            function update_input_numbers_html() {
+                const number_texts = Array.from(document.getElementsByClassName('input-number-text'));
+                for (let i = 0; i<12; i++) {
+                    number_texts[i].innerHTML = game_state.current_round[Math.trunc(i/2)][i%2];
+                }
+            }
+
+            function change_input_number(player, field, op) {
+                game_state.current_round[player][field] += (op == "+") ? 1 : -1
+                update_input_numbers_html();
+                save_game_state();
+            }
+
+            function update_pcount_radio_buttons() {
+                const buttons = Array.from(document.querySelectorAll("input[name='player-count-radio']"));
+                buttons[game_state.player_count-3].click();
+            }
+
+            function get_round_bid_actual(round_number=null) {
+                if (round_number === null) {round_number = game_state.rounds.length-1}
+                if (round_number+1 > game_state.rounds.length) { return null; }
+                
+                let current_round = structuredClone(game_state.rounds[round_number]);
+                if (!current_round) {
+                    return [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]];
+                }
+                for (let i = 0; i<6; i++) {
+                    current_round[i].pop()
+                }
+
+                return current_round;
+            }
+
+            function update_scores_game_state() {
+                if (game_state.rounds.length == 0) {
+                    game_state.scores = [0, 0, 0, 0, 0, 0];
+                    return;
+                }
+                const last_round_scores = game_state.rounds.at(-1);
+                for (let i = 0; i < 6; i++) {
+                    game_state.scores[i] = last_round_scores[i][2];
+                }
+            }
+
+
+            function assign_button_functions() {
+                const input_buttons = Array.from(document.getElementsByClassName('input-button'));
+                for (let i = 0; i<6; i++) {
+                    input_buttons[i * 4].setAttribute("onclick", "change_input_number("+i+",0,\"-\")");
+                    input_buttons[i*4+1].setAttribute("onclick", "change_input_number("+i+",0,\"+\")");
+                    input_buttons[i*4+2].setAttribute("onclick", "change_input_number("+i+",1,\"-\")");
+                    input_buttons[i*4+3].setAttribute("onclick", "change_input_number("+i+",1,\"+\")");
+                }
+            }
+
+            function calc_score(bid, actual, score=0) {
+                let change = 0;
+                if (bid == actual)  { change = 20 + 10 * bid; }
+                else                { change = -10 * Math.abs(bid-actual); }
+                return score + change;
+            }
+
+            function update_player_count(player_count) {
+                const input_table_row = document.getElementById('input-table-row');
+                const player_inputs = input_table_row.children;
+                const score_tables = Array.from(document.getElementById('score-tables').children);
+                
+                // update player inputs
+
+                for (let i = 0; i<6; i++) {
+                    if (i < player_count) {
+                        player_inputs[i].removeAttribute("hidden");
+                    } else {
+                        player_inputs[i].setAttribute("hidden", "true");
+                    }
+                }
+
+                // update score tables
+                let current_tds = null;
+                score_tables.forEach((table) => {
+                    current_tds = Array.from(table.querySelectorAll('td'));
+                    for (let i = 0; i<6; i++) {
+                        if (i < player_count) {
+                            current_tds[2*i].removeAttribute('hidden');
+                            current_tds[2*i+1].removeAttribute('hidden');
+                            current_tds[12+i].removeAttribute('hidden');
+                        } else {
+                            current_tds[2*i].setAttribute('hidden', 'true');
+                            current_tds[2*i+1].setAttribute('hidden', 'true');
+                            current_tds[12+i].setAttribute('hidden', 'true');
+                        }
+                    }
+                });
+
+                
+                game_state.player_count = player_count;
+                save_game_state();
+            }
+
+            function add_one_round(round_scores) {
+                let score_table_div = document.getElementById('score-tables');
+                let last_table = Array.from(score_table_div.children).at(-1);
+                score_table_div.appendChild(last_table.cloneNode(true));
+
+                last_table.removeAttribute('hidden');
+
+                const last_table_cells = Array.from(last_table.querySelectorAll('td'));
+                let scores = [];
+                round_scores.forEach((r) => scores.push(r[2]));
+                const winning_score = Math.max(...scores);
+
+                for (let i = 0; i < 18; i++) {
+                    last_table_cells[table_index_placements[i]].innerHTML = round_scores[Math.trunc(i/3)][i%3];
+                }
+
+                for (let i=0; i<6; i++) {
+                    if (round_scores[i][2] == winning_score) {
+                        last_table_cells[i*2].setAttribute('style', 'background-color:palegoldenrod;');
+                    }
+                    if (round_scores[i][0] != round_scores[i][1]) {
+                        last_table_cells[i*2].setAttribute('style', 'color:firebrick;');
+                    }
+                }
+            }
+
+            function force_update_score_tables() {
+                // delete rows
+                
+                let score_table_div = document.getElementById('score-tables');
+                let all_tables = Array.from(score_table_div.children);
+                let last_table = all_tables.at(-1);
+                const len = score_table_div.children.length-1;
+                
+                for (let i = 0; i < len; i++) {
+                    all_tables[i].remove();
+                }
+
+                // re-add rows
+
+                game_state.rounds.forEach((round) => {
+                    add_one_round(round);
+                });
+            }
+
+            function submit_round() {
+                
+                // handle game_state
+                let round = structuredClone(game_state.current_round);
+                let current_bid = null;
+                let current_score = null;
+                
+                for (let i = 0; i < 6; i++) { // replace 6 with player_count?
+                    current_bid = round[i];
+                    current_score = (i<game_state.player_count) ?
+                        calc_score(current_bid[0], current_bid[1], game_state.scores[i]) : 0;
+                    round[i].push(current_score);
+                    game_state.scores[i] = current_score;
+                }
+                game_state.rounds.push(round);
+
+                // reset input numbers to zeroes
+                game_state.current_round = [[0, 0],[0, 0],[0, 0],[0, 0],[0, 0],[0, 0]];
+                update_input_numbers_html();
+
+                save_game_state();
+
+                // create next table element
+                let last_round = structuredClone(game_state.rounds.at(-1));
+                add_one_round(last_round);
+
+                console.log("Submitted round");
+            }
+
+
+            // returns [Bid, Actual, Score]
+            function score_cell_at(round,player) {
+                const row_cells = Array.from(document.getElementById('score-tables').children)[round].querySelectorAll('td');
+                const returned_cells = [row_cells[player*2+1], 
+                                        row_cells[player+12],
+                                        row_cells[player*2]];
+                return returned_cells;
+            }
+
+            function undo_round() {
+                const deleted_round = game_state.rounds.length-1;
+                let score_table_div = document.getElementById('score-tables');
+                let all_tables = Array.from(score_table_div.children);
+                all_tables[deleted_round].remove();
+                game_state.rounds.pop();
+
+                game_state.current_round = get_round_bid_actual();
+                update_input_numbers_html();
+                update_scores_game_state();
+                save_game_state();
+            }
+
+            function clear_game() {
+                // handle game_state
+                game_state = {
+                    player_count: 6,
+                    names: ["", "", "", "", "", ""],
+                    current_round: [[0, 0],[0, 0],[0, 0],[0, 0],[0, 0],[0, 0]],
+                    rounds: [],
+                    scores: [0, 0, 0, 0, 0, 0]
+                }
+                save_game_state();
+                load_game_state();
+
+                console.log("Cleared");
+            }
+
+            function save_game_state() {
+                localStorage.setItem("game-state", JSON.stringify(game_state));
+            }
+
+            function load_game_state() {
+                game_state = JSON.parse(localStorage.getItem("game-state"));
+                update_pcount_radio_buttons();
+                load_names();
+                update_player_count(game_state.player_count, false);
+                update_input_numbers_html();
+                force_update_score_tables();
+            }
+
+            window.onload = function () {
+                load_game_state();
+                assign_button_functions();
+            }
+
+        </script>
+    </head>
+
+    <body>
+        <a href="/" id="back-button"><p><- go back</p></a>
+        <hr>
+        <div class="container" id="main-container">
+            <div id="player-count-container">
+                <p>Player count</p>
+                <input type="radio" id="player-count-3" name="player-count-radio" value="3" onclick="update_player_count(this.value);">
+                <label for="player-count-3">3</label>
+                <input type="radio" id="player-count-4" name="player-count-radio" value="4" onclick="update_player_count(this.value);">
+                <label for="player-count-4">4</label>
+                <input type="radio" id="player-count-5" name="player-count-radio" value="5" onclick="update_player_count(this.value);">
+                <label for="player-count-5">5</label>
+                <input type="radio" id="player-count-6" name="player-count-radio" value="6" onclick="update_player_count(this.value);">
+                <label for="player-count-6">6</label>
+            </div>
+            <table class="input-table" id="input-table">
+                <tr id="input-table-row" class="input-table-row">
+                    <td id="input-player-0">
+                        <table id="input-buttons-0">
+                            <tr id="player-name-0"><input type="text" id="p0" class="name-field" onblur="save_names();" size="12"></tr>
+                            <tr id="bid-buttons-0" class="button-row">
+                                <td><input type="button" id="bid-less-0" class="input-button" value="<"></td>
+                                <td><input type="button" id="bid-more-0" class="input-button" value=">"></td>
+                                <td class="input-number-cell"><p class="input-number-text" id="bid-count-0">0</p></td>
+                            </tr>
+                            <tr id="actual-buttons-0" class="button-row">
+                                <td><input type="button" id="actual-less-0" class="input-button" value="<"></td>
+                                <td><input type="button" id="actual-more-0" class="input-button" value=">"></td>
+                                <td class="input-number-cell"><p class="input-number-text" id="actual-count-0">0</p></td>
+                            </tr>
+                        </table>
+                    </td>
+                     <td id="input-player-1">
+                        <table id="input-buttons-1">
+                            <tr id="player-name-1"><input type="text" id="p1" class="name-field" onblur="save_names();" size="12"></tr>
+                            <tr id="bid-buttons-1" class="button-row">
+                                <td><input type="button" id="bid-less-1" class="input-button" value="<"></td>
+                                <td><input type="button" id="bid-more-1" class="input-button" value=">"></td>
+                                <td class="input-number-cell"><p class="input-number-text" id="bid-count-1">0</p></td>
+                            </tr>
+                            <tr id="actual-buttons-1" class="button-row">
+                                <td><input type="button" id="actual-less-1" class="input-button" value="<"></td>
+                                <td><input type="button" id="actual-more-1" class="input-button" value=">"></td>
+                                <td class="input-number-cell"><p class="input-number-text" id="actual-count-1">0</p></td>
+                            </tr>
+                        </table>
+                    </td>
+                     <td id="input-player-2">
+                        <table id="input-buttons-2">
+                            <tr id="player-name-2"><input type="text" id="p2" class="name-field" onblur="save_names();" size="12"></tr>
+                            <tr id="bid-buttons-2" class="button-row">
+                                <td><input type="button" id="bid-less-2" class="input-button" value="<"></td>
+                                <td><input type="button" id="bid-more-2" class="input-button" value=">"></td>
+                                <td class="input-number-cell"><p class="input-number-text" id="bid-count-2">0</p></td>
+                            </tr>
+                            <tr id="actual-buttons-2" class="button-row">
+                                <td><input type="button" id="actual-less-2" class="input-button" value="<"></td>
+                                <td><input type="button" id="actual-more-2" class="input-button" value=">"></td>
+                                <td class="input-number-cell"><p class="input-number-text" id="actual-count-2">0</p></td>
+                            </tr>
+                        </table>
+                    </td>
+                     <td id="input-player-3">
+                        <table id="input-buttons-3">
+                            <tr id="player-name-3"><input type="text" id="p3" class="name-field" onblur="save_names();" size="12"></tr>
+                            <tr id="bid-buttons-3" class="button-row">
+                                <td><input type="button" id="bid-less-3" class="input-button" value="<"></td>
+                                <td><input type="button" id="bid-more-3" class="input-button" value=">"></td>
+                                <td class="input-number-cell"><p class="input-number-text" id="bid-count-3">0</p></td>
+                            </tr>
+                            <tr id="actual-buttons-3" class="button-row">
+                                <td><input type="button" id="actual-less-3" class="input-button" value="<"></td>
+                                <td><input type="button" id="actual-more-3" class="input-button" value=">"></td>
+                                <td class="input-number-cell"><p class="input-number-text" id="actual-count-3">0</p></td>
+                            </tr>
+                        </table>
+                    </td>
+                     <td id="input-player-4">
+                        <table id="input-buttons-4">
+                            <tr id="player-name-4"><input type="text" id="p4" class="name-field" onblur="save_names();" size="12"></tr>
+                            <tr id="bid-buttons-4" class="button-row">
+                                <td><input type="button" id="bid-less-4" class="input-button" value="<"></td>
+                                <td><input type="button" id="bid-more-4" class="input-button" value=">"></td>
+                                <td class="input-number-cell"><p class="input-number-text" id="bid-count-4">0</p></td>
+                            </tr>
+                            <tr id="actual-buttons-4" class="button-row">
+                                <td><input type="button" id="actual-less-4" class="input-button" value="<"></td>
+                                <td><input type="button" id="actual-more-4" class="input-button" value=">"></td>
+                                <td class="input-number-cell"><p class="input-number-text" id="actual-count-4">0</p></td>
+                            </tr>
+                        </table>
+                    </td>
+                     <td id="input-player-5">
+                        <table id="input-buttons-5">
+                            <tr id="player-name-5"><input type="text" id="p5" class="name-field" onblur="save_names();" size="12"></tr>
+                            <tr id="bid-buttons-5" class="button-row">
+                                <td><input type="button" id="bid-less-5" class="input-button" value="<"></td>
+                                <td><input type="button" id="bid-more-5" class="input-button" value=">"></td>
+                                <td class="input-number-cell"><p class="input-number-text" id="bid-count-5">0</p></td>
+                            </tr>
+                            <tr id="actual-buttons-5" class="button-row">
+                                <td><input type="button" id="actual-less-5" class="input-button" value="<"></td>
+                                <td><input type="button" id="actual-more-5" class="input-button" value=">"></td>
+                                <td class="input-number-cell"><p class="input-number-text" id="actual-count-5">0</p></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td id="round-buttons">
+                        <input type="button" id="submit-button" value="submit" onclick="submit_round();"><br>
+                        <input type="button" id="undo-button" value="undo" onclick="undo_round();"><br>
+                        <input type="button" id="clear-button" value="clear" onclick="clear_game();">
+                    </td>
+                </tr>
+            </table>
+            <div id="score-tables">
+                <table class="score-table" id="score-table" hidden>
+                    <tr>
+                        <td class='score-text' rowspan="2"></td>
+                        <td class='bid-text'></td>
+                        <td class='score-text' rowspan="2"></td>
+                        <td class='bid-text'></td>
+                        <td class='score-text' rowspan="2"></td>
+                        <td class='bid-text'></td>
+                        <td class='score-text' rowspan="2"></td>
+                        <td class='bid-text'></td>
+                        <td class='score-text' rowspan="2"></td>
+                        <td class='bid-text'></td>
+                        <td class='score-text' rowspan="2"></td>
+                        <td class='bid-text'></td>
+                    </tr>
+                    <tr>
+                        <td class='actual-text'></td>
+                        <td class='actual-text'></td>
+                        <td class='actual-text'></td>
+                        <td class='actual-text'></td>
+                        <td class='actual-text'></td>
+                        <td class='actual-text'></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
